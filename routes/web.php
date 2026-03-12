@@ -11,8 +11,18 @@ Route::controller(App\Http\Controllers\PostController::class)->group(function ()
 Route::get('/posts','index')->name('posts.index');
 Route::get('/posts/create','create')->name('posts.create');
 Route::post('/posts','store')->name('posts.store');
-Route::get('posts/{id}','show')->name('posts.show');
+Route::get('/posts/trashed','trashed')->name('posts.trashed');
+Route::get('posts/{post}','show')->name('posts.show');
 Route::get('/posts/{id}/edit','edit')->name('posts.edit');
 Route::put('/posts/{id}','update')->name('posts.update');
 Route::delete('/posts/{id}','destroy')->name('posts.destroy');
+Route::post('/posts/{id}/restore','restore')->name('posts.restore');
+});
+
+Route::controller(App\Http\Controllers\CommentController::class)->group(function () {
+    Route::post('/posts/{id}/comments','store')->name('comments.store');
+    Route::get('/comments/{comment}/edit','edit')->name('comments.edit');
+    Route::put('/comments/{comment}','update')->name('comments.update');
+    Route::delete('/comments/{id}','destroy')->name('comments.destroy');
+    
 });

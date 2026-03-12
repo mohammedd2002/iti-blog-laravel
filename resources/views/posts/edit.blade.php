@@ -7,7 +7,7 @@
             @method('PUT')
             <div class="mb-4">
                 <label for="title" class="block text-gray-700 font-medium mb-2">Title</label>
-                <input type="text" id="title" name="title " value="{{ $post['title'] }}" 
+                <input type="text" id="title" name="title" value="{{ $post['title'] }}" 
                     class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400">
             </div>
 
@@ -15,6 +15,17 @@
                 <label for="description" class="block text-gray-700 font-medium mb-2">Description</label>
                 <textarea id="description" name="description" rows="5" 
                     class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400">{{ $post['description'] }}</textarea>
+            </div>
+
+
+              <div class="mb-6">
+                <label for="user_id" class="block text-gray-700 font-medium mb-2">Post Creator</label>
+                <select id="user_id" name="user_id" 
+                    class="w-full px-3 py-2 border border-gray-300 rounded bg-white focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400">
+                    @foreach ($user as $users)
+                        <option value="{{ $users->id }}" {{ $post->user_id == $users->id ? 'selected' : '' }}>{{ $users->name }}</option>
+                    @endforeach
+                </select>
             </div>
 
            

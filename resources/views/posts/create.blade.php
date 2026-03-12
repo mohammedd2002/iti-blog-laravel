@@ -17,12 +17,12 @@
             </div>
 
             <div class="mb-6">
-                <label for="creator" class="block text-gray-700 font-medium mb-2">Post Creator</label>
-                <select id="creator" name="creator" 
+                <label for="user_id" class="block text-gray-700 font-medium mb-2">Post Creator</label>
+                <select id="user_id" name="user_id" 
                     class="w-full px-3 py-2 border border-gray-300 rounded bg-white focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400">
-                    <option value="ahmed">Ahmed</option>
-                    <option value="mohamed">Mohamed</option>
-                    <option value="ali">Ali</option>
+                    @foreach ($user as $users)
+                        <option value="{{ $users->id }}">{{ $users->name }}</option>
+                    @endforeach
                 </select>
             </div>
 

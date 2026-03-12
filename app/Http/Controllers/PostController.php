@@ -3,91 +3,67 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Post;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
     public function index()
     {
-        $posts = [
-            [
-                'id' => 1,
-                'title' => 'First Post',
-                'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-                'creator' => [
-                    'name' => 'John Doe',
-                    'email' => 'john@example.com',
-                    'created_at' => '2024-06-01'
-                ],
-            ],
-            [
-                'id' => 2,
-                'title' => 'Second Post',
-                'description' => 'Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-                'creator' => [
-                    'name' => 'Jane Smith',
-                    'email' => 'jane@example.com',
-                    'created_at' => '2024-06-02'
-                ],
-            ],
-            [
-                'id' => 3,
-                'title' => 'Third Post',
-                'description' => 'Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.',
-                'creator' => [
-                    'name' => 'Alice Johnson',
-                    'email' => 'alice@example.com',
-                    'created_at' => '2024-06-03'
-                ],
-            ],
-        ];
+
+        $posts = Post::paginate(10);
         return view('posts.index', ['posts' => $posts]);
     }
 
-    public function show($id)
+    public function show(Post $post)
     {
-        $post = [
-            'id' => $id,
-            'title' => 'Post Title',
-            'creator' => [
-                'name' => 'John Doe',
-                'email' => 'john@example.com',
-                'created_at' => '2024-06-01'
-            ],
-            'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
-        ];
         return view('posts.show', ['post' => $post]);
     }
 
     public function create()
     {
-        return view('posts.create');
+        $user = User::all();
+        return view('posts.create', ['user' => $user]);
     }
 
     public function store()
     {
+        Post::create(request()->all());
         return to_route('posts.index');
     }
 
     public function edit($id)
     {
-        $post = [
-            'id' => $id,
-            'title' => 'Post Title',
-            'description' => 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-
-        ];
-        return view('posts.edit', ['post' => $post]);
+        $user = User::all();
+        $post = Post::find($id);
+        return view('posts.edit', ['post' => $post , 'user' => $user]);
     }
 
     public function update($id)
     {
+        $post = Post::find($id);
+        $post->update(request()->all());
         return to_route('posts.index');
     }
 
     public function destroy($id)
     {
-        
+        $post = Post::find($id);
+        $post->delete();
         return to_route('posts.index');
+    }
+    
+    public function trashed()
+    {
+        $posts = Post::onlyTrashed()->paginate(10);
+        return view('posts.trashed', ['posts' => $posts]);
+    }
+
+    public function restore($id)
+    {
+        $post = Post::onlyTrashed()->find($id);
+        $post->restore();
+        return to_route('posts.trashed');
     }
 }
