@@ -10,6 +10,9 @@
                 <input type="text" id="title" name="title" value="{{ $post['title'] }}" 
                     class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400">
             </div>
+            @error()
+                
+            @enderror
 
             <div class="mb-4">
                 <label for="description" class="block text-gray-700 font-medium mb-2">Description</label>

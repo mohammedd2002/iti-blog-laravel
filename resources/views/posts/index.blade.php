@@ -6,11 +6,11 @@
                 class="bg-emerald-500 text-white px-4 py-2 rounded-md hover:bg-emerald-600 font-medium">
                 Create Post
             </a>
-          
-                <a href="{{ route('posts.trashed') }}"
-                    class="bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600 font-medium ml-4">
-                    Restore Posts
-                </a>
+
+            <a href="{{ route('posts.trashed') }}"
+                class="bg-yellow-500 text-white px-4 py-2 rounded-md hover:bg-yellow-600 font-medium ml-4">
+                Restore Posts
+            </a>
         </div>
 
         <div class="overflow-x-auto">
@@ -26,7 +26,6 @@
                 </thead>
                 <tbody class="divide-y">
                     @foreach ($posts as $post)
-
                         <tr>
                             <td class="py-3 px-2">{{ $post->id }}</td>
                             <td class="py-3 px-2">{{ $post->title }}</td>
@@ -40,11 +39,16 @@
                                 <a href="{{ route('posts.edit', $post['id']) }}"
                                     class="text-green-600 hover:underline mr-3">Edit</a> --}}
 
+                                {{-- <view-ajax id="{{ $post->id }}" url="{{ route('posts.show', $post->id) }}"></view-ajax> --}}
+                                   
                                 <x-button type="primary" :route="route('posts.show', $post->id)" name="View">
                                 </x-button>
+                                
 
                                 <x-button type="secondary" :route="route('posts.edit', $post['id'])" name="Edit">
                                 </x-button>
+
+
 
 
 

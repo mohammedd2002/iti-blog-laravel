@@ -3,22 +3,28 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\StorePostRequest;
+use App\Http\Requests\UpdatePostRequest;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Inertia\Inertia;
 
 class PostController extends Controller
 {
     public function index()
     {
 
-        $posts = Post::paginate(10);
-        return view('posts.index', ['posts' => $posts]);
+        $posts = Post::with(['user'])->paginate(10);
+        // return view('posts.index', ['posts' => $posts]);
+        return Inertia::render('posts/Index', ['posts' => $posts]);
     }
 
     public function show(Post $post)
     {
-        return view('posts.show', ['post' => $post]);
+        
+        return response()->json($post->load('user'));
+        // return view('posts.show', ['post' => $post]);
     }
 
     public function create()
@@ -27,9 +33,10 @@ class PostController extends Controller
         return view('posts.create', ['user' => $user]);
     }
 
-    public function store()
+    public function store(StorePostRequest $request)
     {
-        Post::create(request()->all());
+
+        Post::create($request->validated());
         return to_route('posts.index');
     }
 
@@ -37,13 +44,13 @@ class PostController extends Controller
     {
         $user = User::all();
         $post = Post::find($id);
-        return view('posts.edit', ['post' => $post , 'user' => $user]);
+        return view('posts.edit', ['post' => $post, 'user' => $user]);
     }
 
-    public function update($id)
+    public function update(UpdatePostRequest $request, $id)
     {
         $post = Post::find($id);
-        $post->update(request()->all());
+        $post->update($request->validated());
         return to_route('posts.index');
     }
 
@@ -51,9 +58,9 @@ class PostController extends Controller
     {
         $post = Post::find($id);
         $post->delete();
-        return to_route('posts.index');
+        return to_route('posts.index', [], 303);
     }
-    
+
     public function trashed()
     {
         $posts = Post::onlyTrashed()->paginate(10);
