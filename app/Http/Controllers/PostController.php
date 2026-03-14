@@ -8,6 +8,7 @@ use App\Http\Requests\UpdatePostRequest;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use Inertia\Inertia;
 
 class PostController extends Controller
@@ -16,15 +17,15 @@ class PostController extends Controller
     {
 
         $posts = Post::with(['user'])->paginate(10);
-        // return view('posts.index', ['posts' => $posts]);
-        return Inertia::render('posts/Index', ['posts' => $posts]);
+        return view('posts.index', ['posts' => $posts]);
+        // return Inertia::render('posts/Index', ['posts' => $posts]);
     }
 
     public function show(Post $post)
     {
-        
-        return response()->json($post->load('user'));
-        // return view('posts.show', ['post' => $post]);
+
+        // return response()->json($post->load('user'));
+        return view('posts.show', ['post' => $post]);
     }
 
     public function create()
@@ -35,8 +36,14 @@ class PostController extends Controller
 
     public function store(StorePostRequest $request)
     {
+        $validatedData = $request->validated();
 
-        Post::create($request->validated());
+        if ($request->hasFile('image')) {
+            $validatedData['image'] = $request->file('image');
+        }
+
+
+        Post::create($validatedData);
         return to_route('posts.index');
     }
 
@@ -49,14 +56,25 @@ class PostController extends Controller
 
     public function update(UpdatePostRequest $request, $id)
     {
+        $validatedData = $request->validated();
         $post = Post::find($id);
-        $post->update($request->validated());
+
+        if ($request->hasFile('image')) {
+            $validatedData['image'] = $request->file('image');
+        }
+
+        $post->update($validatedData);
         return to_route('posts.index');
     }
 
     public function destroy($id)
     {
         $post = Post::find($id);
+        
+        if ($post->image) {
+            Storage::disk('public')->delete($post->image);
+        }
+
         $post->delete();
         return to_route('posts.index', [], 303);
     }

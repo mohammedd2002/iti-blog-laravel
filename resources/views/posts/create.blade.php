@@ -2,7 +2,7 @@
 <x-Layout navTitle="Create Post">
     <div class="container mx-auto mt-10 max-w-4xl bg-white p-8 rounded shadow-sm">
         
-        <form action="{{ route('posts.store') }}" method="POST">
+        <form action="{{ route('posts.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
             <div class="mb-4">
                 <label for="title" class="block text-gray-700 font-medium mb-2">Title</label>
@@ -21,6 +21,18 @@
             @error('description')
                 <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
             @enderror
+
+            
+
+            <div class="mb-4">
+                <label for="image" class="block text-gray-700 font-medium mb-2">Image</label>
+                <input type="file" id="image" name="image" 
+                    class="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-200 focus:border-blue-400">
+            </div>
+            @error('image')
+                <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
+            @enderror
+
 
             <div class="mb-6">
                 <label for="user_id" class="block text-gray-700 font-medium mb-2">Post Creator</label>

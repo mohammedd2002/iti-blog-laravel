@@ -19,6 +19,8 @@
                     <tr class="border-b">
                         <th class="py-4 px-2 font-semibold">ID</th>
                         <th class="py-4 px-2 font-semibold">Title</th>
+                        <th class="py-4 px-2 font-semibold">Slug</th>
+                        <th class="py-4 px-2 font-semibold">Image</th>
                         <th class="py-4 px-2 font-semibold">Posted By</th>
                         <th class="py-4 px-2 font-semibold">Created At</th>
                         <th class="py-4 px-2 font-semibold">Actions</th>
@@ -29,6 +31,14 @@
                         <tr>
                             <td class="py-3 px-2">{{ $post->id }}</td>
                             <td class="py-3 px-2">{{ $post->title }}</td>
+                            <td class="py-3 px-2">{{ $post->slug }}</td>
+                            <td class="py-3 px-2">
+                                @if ($post->image)
+                                    <img src="{{ asset('storage/' . $post->image) }}" alt="Post Image" class="w-16 h-16 object-cover rounded">
+                                @else
+                                    No Image
+                                @endif
+                            </td>
                             <td class="py-3 px-2">{{ $post->user?->name }}</td>
                             <td class="py-3 px-2">{{ $post->created_at->format('Y-m-d') }}</td>
                             <td class="py-1 px-1 flex space-x-2">

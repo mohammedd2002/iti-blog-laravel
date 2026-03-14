@@ -1,25 +1,21 @@
 <!DOCTYPE html>
-<html lang="ar" dir="ltr">
+<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ITI Blog</title>
-    @routes
-    @vite(['resources/js/app.js' , 'resources/css/app.css'])
-    @inertiaHead
-</head>
+        <title inertia>{{ config('app.name', 'Laravel') }}</title>
 
-<body class="bg-gray-100">
+        <!-- Fonts -->
+        <link rel="preconnect" href="https://fonts.bunny.net">
+        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
-    <nav class="bg-slate-800 text-white p-4">
-        <div class="container mx-auto flex gap-6 items-center">
-            <span class="font-bold text-lg">ITI Blog</span>
-            <a href="{{ route('posts.index') }}" class="hover:text-gray-300">Home</a>
-        </div>
-    </nav>
-
-    @inertia
-</body>
-
+        <!-- Scripts -->
+        @routes
+        @vite(['resources/js/app.js', "resources/js/Pages/{$page['component']}.vue"])
+        @inertiaHead
+    </head>
+    <body class="font-sans antialiased">
+        @inertia
+    </body>
 </html>
